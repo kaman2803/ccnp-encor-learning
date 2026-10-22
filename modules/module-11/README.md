@@ -1,15 +1,31 @@
-# Module 11 — Network Routing: Exploring eBGP
+# Module 11 — CCNP ENCOR · 02
 
-**Status:** In progress
+## Network Routing — Exploring eBGP
 
-## Interactive section
+This module contains the interactive BGP learning pages and study materials for CCNP ENCOR revision.
 
-[Open the interactive Section 11.1 website](index.html)
+### Interactive learning sections
 
-## Study sections
+- [Section 11.1 — Introduction](./index.html)
+- [Section 11.2 — Interdomain Routing with BGP](./section-11-2.html)
 
-- [Sections index](sections/README.md)
+### Study sections
 
-The current interactive page contains the Section 11.1 introduction, English study notes, French vocabulary explanations, six practice questions with scoring and explanations, flashcards, and browser-local progress tracking.
+The module covers the following topics:
 
-The remaining section names and module syllabus will be aligned with the course material as it is provided.
+1. Introduction to BGP
+2. Interdomain routing with BGP
+3. BGP operations
+4. BGP neighbor relationships
+5. BGP path selection
+6. BGP path attributes
+7. Single-homed eBGP configuration and verification
+8. Module summary
+
+Study sections and their supporting materials will be organized as the module progresses.
+
+### Practice and assessment
+
+Interactive quizzes, flashcards, explanations, and revision activities are designed to support learning and exam preparation.
+
+Practice material is for study purposes and is not represented as official Cisco exam content.
