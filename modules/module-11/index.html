@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Interactive CCNP ENCOR BGP revision — Module 11, Section 11.1 Introduction.">
+<title>KG-Lab | BGP Learning</title>
+<style>
+:root{--bg:#0b1220;--panel:#121d30;--panel2:#18263d;--text:#edf3ff;--muted:#aab8ce;--accent:#58d6c5;--accent2:#72a7ff;--good:#5ed39a;--bad:#ff8585;--line:#2b3a54;--shadow:0 18px 45px #0003}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top left,#142a42 0,transparent 42%),var(--bg);color:var(--text);font:16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}a{color:var(--accent)}button{font:inherit;cursor:pointer;border:1px solid var(--line);border-radius:12px;padding:.7rem 1rem;background:var(--panel2);color:var(--text);transition:.15s}button:hover{border-color:var(--accent);transform:translateY(-1px)}button:focus-visible,a:focus-visible{outline:3px solid var(--accent2);outline-offset:3px}.wrap{max-width:1120px;margin:auto;padding:24px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}.brand{font-weight:800;letter-spacing:.06em;color:var(--accent)}.pill{border:1px solid var(--line);border-radius:999px;padding:5px 12px;color:var(--muted);font-size:.85rem}.hero{padding:34px 0 22px}.hero h1{font-size:clamp(2rem,5vw,3.5rem);line-height:1.1;margin:.35rem 0 1rem;letter-spacing:-.04em}.hero p{color:var(--muted);max-width:760px}.progressbox,.panel{background:linear-gradient(145deg,#15243a,#101a2a);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow)}.progressbox{padding:18px;margin:20px 0}.progressline{height:9px;border-radius:20px;background:#26344a;overflow:hidden;margin-top:10px}.progressfill{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .3s}.nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}.nav button[aria-selected=true]{background:var(--accent);color:#06211e;border-color:var(--accent);font-weight:750}.panel{padding:clamp(18px,3vw,30px);margin:16px 0}.panel h2{margin-top:0}.muted{color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}.mini{padding:16px;border:1px solid var(--line);border-radius:15px;background:#ffffff05}.mini h3{margin:.2rem 0}.tag{display:inline-block;font-size:.78rem;border-radius:6px;background:#23404c;color:#a8fff1;padding:3px 8px}.callout{border-left:4px solid var(--accent);padding:12px 16px;background:#58d6c510;border-radius:0 12px 12px 0;margin:18px 0}.tablewrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:570px}th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--accent)}.diagram{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:14px;margin:20px 0}.asbox{border:1px solid var(--line);background:#ffffff06;border-radius:16px;padding:20px;text-align:center}.asbox strong{display:block;font-size:1.2rem;color:var(--accent)}.arrow{text-align:center;color:var(--accent2);font-weight:800}.question{padding:20px 0;border-bottom:1px solid var(--line)}.question:last-child{border-bottom:0}.question h3{font-size:1.05rem}.options{display:grid;gap:8px}.option{display:flex;align-items:flex-start;gap:10px;text-align:left;width:100%;background:#ffffff04}.option.selected{border-color:var(--accent2);background:#72a7ff15}.option.correct{border-color:var(--good);background:#5ed39a13}.option.wrong{border-color:var(--bad);background:#ff858513}.option .letter{font-weight:800;color:var(--accent);min-width:22px}.feedback{padding:12px;border-radius:10px;margin-top:10px;background:#ffffff08}.feedback.good{border:1px solid var(--good)}.feedback.bad{border:1px solid var(--bad)}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.primary{background:var(--accent);color:#05211d;border-color:var(--accent);font-weight:800}.flashcard{min-height:230px;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;background:linear-gradient(140deg,#182b45,#102033);border:1px solid #36506c;border-radius:18px}.flashcard .face{color:var(--accent);font-size:.8rem;letter-spacing:.1em;text-transform:uppercase}.flashcard .content{font-size:clamp(1.2rem,3vw,1.7rem);font-weight:700;max-width:650px;margin:14px 0}.score{font-size:2rem;font-weight:850;color:var(--accent)}.hidden{display:none!important}details{border:1px solid var(--line);border-radius:12px;padding:12px 15px;margin:10px 0}summary{cursor:pointer;font-weight:700}footer{padding:25px 0;color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);margin-top:30px}.small{font-size:.85rem}.reset{color:#ffc0c0}@media(max-width:620px){.wrap{padding:15px}.diagram{grid-template-columns:1fr}.arrow{padding:4px}.arrow span{display:inline-block;transform:rotate(90deg)}.panel{border-radius:15px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <div class="brand">KG-LAB / NETWORKING</div>
+  <div class="pill">CCNP ENCOR · MODULE 11</div>
+</header>
+<section class="hero">
+  <span class="tag">INTERACTIVE STUDY SPACE</span>
+  <h1>Exploring eBGP</h1>
+  <p>Module 11 · Section 11.1.0 — Introduction. Study in English, clarify difficult terms in French, test your knowledge, and track your revision progress.</p>
+</section>
+<section class="progressbox" aria-label="Learning progress">
+  <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><strong>Section progress</strong><span id="progressText" class="muted">0 of 3 activities complete</span></div>
+  <div class="progressline"><div class="progressfill" id="progressFill"></div></div>
+  <p class="small muted" id="progressHint">Complete the quiz, review the flashcards, and mark the notes as studied. Progress is saved in this browser.</p>
+</section>
+<nav class="nav" aria-label="Sections">
+  <button data-tab="learn" aria-selected="true">Study notes</button>
+  <button data-tab="quiz" aria-selected="false">QCM quiz</button>
+  <button data-tab="cards" aria-selected="false">Flashcards</button>
+  <button data-tab="progress" aria-selected="false">My progress</button>
+</nav>
+
+<main>
+<section id="learn" class="tab">
+  <div class="panel">
+    <h2>1. Study Notes — in English</h2>
+    <h3>What is BGP?</h3>
+    <p><strong>Border Gateway Protocol (BGP)</strong> is a routing protocol used to exchange routing information between different Autonomous Systems (AS).</p>
+    <p>BGP is the main routing protocol used to exchange routes between networks on the Internet. It is also widely used in service provider networks and Multiprotocol Label Switching (MPLS) environments.</p>
+    <p>BGP is designed to support large networks and complex routing policies. It allows network administrators to control how traffic enters and leaves their networks.</p>
+    <h3>Key characteristics of BGP</h3>
+    <ul>
+      <li><strong>Interdomain routing:</strong> BGP exchanges routes between different Autonomous Systems.</li>
+      <li><strong>Scalability:</strong> BGP can handle a very large number of routes, including Internet routing tables.</li>
+      <li><strong>Policy-based routing:</strong> Administrators can influence route selection using BGP attributes and routing policies.</li>
+      <li><strong>Reliability:</strong> BGP uses TCP to establish reliable connections between BGP neighbors.</li>
+      <li><strong>Security:</strong> BGP supports mechanisms and operational practices that help protect routing information, although BGP is not automatically secure by default.</li>
+    </ul>
+    <h3>What is an Autonomous System (AS)?</h3>
+    <p>An <strong>Autonomous System (AS)</strong> is a group of IP networks and routers managed by a single organization or under a common routing policy.</p>
+    <p>Each public AS is identified by an Autonomous System Number (ASN).</p>
+    <div class="diagram" role="img" aria-label="AS 65000 customer connects by eBGP to AS 65001 Internet Service Provider">
+      <div class="asbox"><strong>AS 65000</strong>Customer Network<p class="muted small">Uses an internal routing protocol such as OSPF</p></div>
+      <div class="arrow"><span>↔</span><br>eBGP<br><small>Route exchange</small></div>
+      <div class="asbox"><strong>AS 65001</strong>Internet Service Provider<p class="muted small">Uses BGP to exchange routes with other networks</p></div>
+    </div>
+    <p>The customer and the service provider can use an IGP, such as OSPF, within their own networks while using eBGP to exchange routes between their Autonomous Systems.</p>
+    <h3>What are IGP, EGP, and BGP?</h3>
+    <div class="tablewrap"><table><thead><tr><th>Term</th><th>Meaning</th><th>Main purpose</th></tr></thead><tbody>
+      <tr><td>IGP</td><td>Interior Gateway Protocol</td><td>Exchanges routes within an AS. Examples: OSPF and EIGRP.</td></tr>
+      <tr><td>EGP</td><td>Exterior Gateway Protocol</td><td>General category of protocols used for routing between ASes.</td></tr>
+      <tr><td>BGP</td><td>Border Gateway Protocol</td><td>The principal interdomain routing protocol used on the Internet.</td></tr>
+      <tr><td>eBGP</td><td>External BGP</td><td>Establishes BGP neighbor relationships between different ASes.</td></tr>
+      <tr><td>iBGP</td><td>Internal BGP</td><td>Exchanges BGP routing information between peers in the same AS.</td></tr>
+    </tbody></table></div>
+    <div class="callout"><strong>Important:</strong> BGP is used for both eBGP and iBGP. The distinction depends on whether the BGP peers belong to different ASes or the same AS.</div>
+    <h3>Where is BGP used?</h3>
+    <ol>
+      <li><strong>Internet routing:</strong> Internet Service Providers (ISPs) exchange routes with other providers and networks.</li>
+      <li><strong>MPLS service provider networks:</strong> BGP supports services such as MPLS Layer 3 VPNs.</li>
+      <li><strong>Enterprise networks:</strong> Organizations use BGP for connections to multiple ISPs, data centers, and other external networks.</li>
+    </ol>
+    <h3>What will this module cover?</h3>
+    <ul><li>Interdomain routing with BGP.</li><li>BGP operations and neighbor relationships.</li><li>BGP path selection and path attributes.</li><li>Configuration and verification of a single-homed eBGP connection between a customer and a provider.</li></ul>
+    <p>A <strong>single-homed connection</strong> means that a customer connects to one service provider through one external connection for that particular Internet access arrangement.</p>
+  </div>
+  <div class="panel">
+    <h2>2. Difficult Terms — French Explanations</h2>
+    <div class="tablewrap"><table><thead><tr><th>English term</th><th>Explication en français</th></tr></thead><tbody>
+      <tr><td>Routing protocol</td><td>Protocole de routage : permet aux routeurs d'apprendre les routes vers les réseaux.</td></tr>
+      <tr><td>Route exchange</td><td>Échange d'informations de routage entre routeurs.</td></tr>
+      <tr><td>Autonomous System (AS)</td><td>Ensemble de réseaux administrés selon une politique de routage commune.</td></tr>
+      <tr><td>ASN</td><td>Numéro identifiant un système autonome.</td></tr>
+      <tr><td>Interdomain routing</td><td>Routage entre plusieurs systèmes autonomes.</td></tr>
+      <tr><td>Scalability</td><td>Capacité à fonctionner lorsque le réseau et le nombre de routes augmentent fortement.</td></tr>
+      <tr><td>Routing policy</td><td>Règles permettant de contrôler les routes acceptées, annoncées ou préférées.</td></tr>
+      <tr><td>Service provider</td><td>Fournisseur de services réseau, par exemple un opérateur Internet.</td></tr>
+      <tr><td>Single-homed</td><td>Raccordement à un seul fournisseur dans le scénario étudié.</td></tr>
+      <tr><td>MPLS</td><td>Multiprotocol Label Switching : technologie qui utilise des labels pour acheminer les paquets dans un réseau.</td></tr>
+    </tbody></table></div>
+    <div class="actions"><button class="primary" id="markStudied">Mark notes as studied ✓</button><span class="muted small" id="studiedStatus" aria-live="polite"></span></div>
+  </div>
+</section>
+
+<section id="quiz" class="tab hidden">
+  <div class="panel">
+    <h2>3. Exam Practice — CCNA/CCNP-Style QCM</h2>
+    <p class="muted">Choose one answer unless the question says “Select two”. Submit the quiz to see your score and explanations. These are practice questions, not claimed official exam questions.</p>
+    <div id="quizQuestions"></div>
+    <div class="actions"><button class="primary" id="submitQuiz">Submit answers</button><button id="resetQuiz">Try again</button></div>
+    <div id="quizResult" class="callout hidden" aria-live="polite"></div>
+  </div>
+</section>
+
+<section id="cards" class="tab hidden">
+  <div class="panel">
+    <h2>4. Quick Revision — Flashcards</h2>
+    <p class="muted">Reveal each answer, then mark whether you knew it. Your review progress is saved in this browser.</p>
+    <div class="flashcard" id="flashcard" tabindex="0" role="button" aria-label="Reveal flashcard answer">
+      <div class="face" id="cardFace">Question · 1 / 5</div>
+      <div class="content" id="cardContent">What does BGP stand for?</div>
+      <div class="muted small">Click the card or press Enter to reveal the answer</div>
+    </div>
+    <div class="actions" style="justify-content:center">
+      <button id="prevCard">← Previous</button><button class="primary" id="flipCard">Reveal answer</button><button id="nextCard">Next →</button>
+    </div>
+    <div class="actions" style="justify-content:center">
+      <button id="knowCard">✓ I knew it</button><button id="missCard">× Review again</button>
+    </div>
+    <p id="cardStatus" class="muted" style="text-align:center" aria-live="polite"></p>
+  </div>
+</section>
+
+<section id="progress" class="tab hidden">
+  <div class="panel">
+    <h2>5. My Progress</h2>
+    <p class="muted">Progress is stored locally in this browser using localStorage. It is not automatically synced across devices or browsers.</p>
+    <div class="grid">
+      <div class="mini"><span class="muted">Notes</span><div class="score" id="pNotes">Not yet</div><p class="small">Mark the study notes as studied.</p></div>
+      <div class="mini"><span class="muted">Quiz</span><div class="score" id="pQuiz">—</div><p class="small">Best score recorded for this section.</p></div>
+      <div class="mini"><span class="muted">Flashcards known</span><div class="score" id="pCards">0 / 5</div><p class="small">Cards marked “I knew it”.</p></div>
+    </div>
+    <h3>Quick Revision — Key Takeaways</h3>
+    <ul>
+      <li>BGP stands for <strong>Border Gateway Protocol</strong>.</li>
+      <li>BGP exchanges routing information between Autonomous Systems.</li>
+      <li>An AS is a group of networks managed under a common routing policy.</li>
+      <li>eBGP operates between different ASes.</li>
+      <li>iBGP operates between peers in the same AS.</li>
+      <li>BGP uses TCP port 179.</li>
+      <li>OSPF and EIGRP are examples of IGPs.</li>
+      <li>BGP is widely used for Internet routing and supports MPLS service provider environments.</li>
+      <li>A single-homed customer connects to one service provider in the scenario studied.</li>
+    </ul>
+    <div class="actions"><button id="exportProgress">Export progress JSON</button><button id="resetProgress" class="reset">Reset this section's progress</button></div>
+    <p class="small muted" id="progressMessage" aria-live="polite"></p>
+  </div>
+</section>
+</main>
+<footer>
+  <strong>KG-Lab</strong> · CCNP ENCOR study companion · Module 11, Section 11.1.0<br>
+  Content based on the study notes provided for this section. Expand this project with later sections as you progress.
+</footer>
+</div>
+<script>
+const STORAGE_KEY='kgLabBgpSection110_v1';
+const quizData=[
+ {q:'What is the primary purpose of BGP?',options:['To assign IP addresses automatically','To exchange routing information between Autonomous Systems','To encrypt all IP traffic','To replace Ethernet switching'],correct:[1],why:'BGP is the principal interdomain routing protocol used to exchange reachability information between ASes.'},
+ {q:'Which routing protocol is commonly used for routing between different Autonomous Systems?',options:['OSPF','EIGRP','eBGP','STP'],correct:[2],why:'eBGP establishes BGP neighbor relationships between routers belonging to different ASes.'},
+ {q:'Which statements about BGP are correct? Select two.',options:['BGP supports policy-based route selection.','BGP is widely used for Internet routing.','BGP automatically encrypts all routing updates.','BGP can only operate inside one AS.'],correct:[0,1],why:'BGP supports routing policies and is fundamental to Internet interdomain routing. It does not automatically encrypt all routing updates.'},
+ {q:'A customer router in AS 65000 peers with an ISP router in AS 65001. Which type of BGP relationship is this?',options:['iBGP','eBGP','OSPF adjacency','EIGRP adjacency'],correct:[1],why:'The peers belong to different ASes, so the relationship is eBGP.'},
+ {q:'Which statement best describes an Autonomous System?',options:['A single physical router','A group of networks managed under a common routing policy','A type of Ethernet cable','A protocol that assigns MAC addresses'],correct:[1],why:'An AS groups networks and routers under a common administrative and routing-policy framework.'},
+ {q:'Which transport protocol does BGP use to establish its peer connection?',options:['UDP port 53','TCP port 179','UDP port 67','TCP port 443'],correct:[1],why:'BGP uses TCP port 179 to establish its sessions and provide reliable transport.'}
+];
+const flashcards=[
+ {front:'What does BGP stand for?',back:'Border Gateway Protocol.'},
+ {front:'What is an AS?',back:'A group of networks managed under a common routing policy.'},
+ {front:'What is the difference between eBGP and iBGP?',back:'eBGP connects peers in different ASes; iBGP connects peers in the same AS.'},
+ {front:'Which transport protocol and port does BGP use?',back:'TCP port 179.'},
+ {front:'Name two common IGPs.',back:'OSPF and EIGRP.'}
+];
+let state={notesStudied:false,bestScore:null,lastScore:null,quizComplete:false,flashKnown:[],flashMissed:[],cardIndex:0,cardRevealed:false};
+try{const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null');if(saved)state={...state,...saved}}catch(e){}
+let selected={};let submitted=false;
+const $=id=>document.getElementById(id);
+function save(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}catch(e){};renderProgress()}
+function renderProgress(){
+ const activities=(state.notesStudied?1:0)+(state.quizComplete?1:0)+(state.flashKnown.length===flashcards.length?1:0);
+ $('progressText').textContent=activities+' of 3 activities complete';
+ $('progressFill').style.width=(activities/3*100)+'%';
+ $('pNotes').textContent=state.notesStudied?'Complete':'Not yet';
+ $('pQuiz').textContent=state.bestScore===null?'—':state.bestScore+'%';
+ $('pCards').textContent=state.flashKnown.length+' / '+flashcards.length;
+ $('studiedStatus').textContent=state.notesStudied?'Notes marked as studied.':'';
+ $('cardStatus').textContent='Known: '+state.flashKnown.length+'/'+flashcards.length+' · Review again: '+state.flashMissed.length;
+}
+document.querySelectorAll('[data-tab]').forEach(btn=>btn.addEventListener('click',()=>{
+ document.querySelectorAll('[data-tab]').forEach(b=>b.setAttribute('aria-selected',String(b===btn)));
+ document.querySelectorAll('.tab').forEach(s=>s.classList.toggle('hidden',s.id!==btn.dataset.tab));
+ if(btn.dataset.tab==='progress')renderProgress();
+}));
+$('markStudied').addEventListener('click',()=>{state.notesStudied=true;save()});
+function renderQuiz(){
+ const root=$('quizQuestions');root.innerHTML='';
+ quizData.forEach((q,i)=>{
+  const article=document.createElement('div');article.className='question';
+  const title=document.createElement('h3');title.textContent=(i+1)+'. '+q.q;article.appendChild(title);
+  const opts=document.createElement('div');opts.className='options';
+  q.options.forEach((opt,j)=>{
+   const b=document.createElement('button');b.type='button';b.className='option';b.dataset.q=i;b.dataset.opt=j;
+   const letter=document.createElement('span');letter.className='letter';letter.textContent=String.fromCharCode(65+j)+'.';
+   const text=document.createElement('span');text.textContent=opt;b.append(letter,text);
+   if((selected[i]||[]).includes(j))b.classList.add('selected');
+   if(submitted){b.disabled=true;if(q.correct.includes(j))b.classList.add('correct');else if((selected[i]||[]).includes(j))b.classList.add('wrong')}
+   b.addEventListener('click',()=>{if(submitted)return;const multi=q.q.includes('Select two');let cur=selected[i]||[];selected[i]=multi?(cur.includes(j)?cur.filter(x=>x!==j):cur.length<2?[...cur,j]:cur):[j];renderQuiz()});
+   opts.appendChild(b);
+  });article.appendChild(opts);
+  if(submitted){
+   const good=(selected[i]||[]).length===q.correct.length&&q.correct.every(x=>(selected[i]||[]).includes(x))&&(selected[i]||[]).every(x=>q.correct.includes(x));
+   const f=document.createElement('div');f.className='feedback '+(good?'good':'bad');
+   const strong=document.createElement('strong');strong.textContent=good?'Correct.':'Review this answer.';f.appendChild(strong);
+   const answer=document.createElement('p');answer.textContent='Correct answer: '+q.correct.map(x=>String.fromCharCode(65+x)+'. '+q.options[x]).join(' | ');f.appendChild(answer);
+   const why=document.createElement('p');why.textContent=q.why;f.appendChild(why);article.appendChild(f);
+  }
+  root.appendChild(article);
+ });
+ $('submitQuiz').disabled=submitted;
+}
+$('submitQuiz').addEventListener('click',()=>{
+ if(quizData.some((q,i)=>!selected[i]||selected[i].length===0)){$('quizResult').classList.remove('hidden');$('quizResult').textContent='Please answer every question before submitting.';return}
+ submitted=true;let score=0;
+ quizData.forEach((q,i)=>{const a=selected[i]||[];if(a.length===q.correct.length&&q.correct.every(x=>a.includes(x))&&a.every(x=>q.correct.includes(x)))score++});
+ const pct=Math.round(score/quizData.length*100);state.lastScore=pct;state.bestScore=state.bestScore===null?pct:Math.max(state.bestScore,pct);state.quizComplete=true;save();renderQuiz();
+ $('quizResult').classList.remove('hidden');$('quizResult').innerHTML='<strong>Score: '+score+'/'+quizData.length+' ('+pct+'%)</strong><br>'+(pct===100?'Excellent — all answers correct!':pct>=70?'Good work. Review any explanations marked incorrect.':'Review the notes and try again to strengthen your understanding.');
+});
+$('resetQuiz').addEventListener('click',()=>{selected={};submitted=false;$('quizResult').classList.add('hidden');renderQuiz()});
+function renderCard(){
+ const c=flashcards[state.cardIndex];$('cardFace').textContent=(state.cardRevealed?'Answer':'Question')+' · '+(state.cardIndex+1)+' / '+flashcards.length;
+ $('cardContent').textContent=state.cardRevealed?c.back:c.front;$('flipCard').textContent=state.cardRevealed?'Show question':'Reveal answer';
+ $('knowCard').disabled=!state.cardRevealed;$('missCard').disabled=!state.cardRevealed;
+ renderProgress();
+}
+function flip(){state.cardRevealed=!state.cardRevealed;renderCard()}
+function nextCard(delta){state.cardIndex=(state.cardIndex+delta+flashcards.length)%flashcards.length;state.cardRevealed=false;renderCard()}
+$('flashcard').addEventListener('click',flip);$('flashcard').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();flip()}});
+$('flipCard').addEventListener('click',flip);$('prevCard').addEventListener('click',()=>nextCard(-1));$('nextCard').addEventListener('click',()=>nextCard(1));
+$('knowCard').addEventListener('click',()=>{const i=state.cardIndex;if(!state.flashKnown.includes(i))state.flashKnown.push(i);state.flashMissed=state.flashMissed.filter(x=>x!==i);save();nextCard(1)});
+$('missCard').addEventListener('click',()=>{const i=state.cardIndex;if(!state.flashMissed.includes(i))state.flashMissed.push(i);state.flashKnown=state.flashKnown.filter(x=>x!==i);save();nextCard(1)});
+$('exportProgress').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='bgp-section-11-1-progress.json';a.click();URL.revokeObjectURL(url);$('progressMessage').textContent='Progress JSON exported.'});
+$('resetProgress').addEventListener('click',()=>{if(confirm('Reset notes, quiz score, and flashcard progress for Section 11.1?')){state={notesStudied:false,bestScore:null,lastScore:null,quizComplete:false,flashKnown:[],flashMissed:[],cardIndex:0,cardRevealed:false};selected={};submitted=false;save();renderQuiz();renderCard();$('progressMessage').textContent='Section progress has been reset.'}});
+renderQuiz();renderCard();renderProgress();
+</script>
+</body>
+</html>
