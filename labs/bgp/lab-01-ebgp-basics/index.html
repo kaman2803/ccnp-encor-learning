@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Lab 01 — eBGP Basics | KG-Lab</title><link rel="stylesheet" href="../../../assets/css/learning.css"><style>
+:root{color-scheme:dark}.lab-wrap{max-width:1000px;margin:0 auto;padding:24px 20px 60px}.lab-hero{padding:28px 0 18px}.eyebrow{display:inline-block;padding:6px 10px;border-radius:7px;background:#173e49;color:#8df0e1;font-size:.78rem;font-weight:700;letter-spacing:.04em}.lab-hero h1{font-size:clamp(2.2rem,5vw,3.5rem);margin:14px 0 10px}.lab-hero p{max-width:780px;color:var(--muted,#aebbd0);line-height:1.7}.back-link{display:inline-block;margin:10px 0 24px;color:#55dccb}.progressbox,.panel{border:1px solid var(--border,#24334c);border-radius:18px;background:rgba(21,35,56,.78);padding:20px;margin:18px 0}.progress-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-weight:700}.progressline{height:7px;border-radius:99px;background:#28364c;margin:12px 0;overflow:hidden}.progressfill{height:100%;width:0;background:#55dccb;transition:width .2s}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}.tab{border:1px solid var(--border,#26364e);background:#111e31;color:inherit;border-radius:10px;padding:11px 14px;font-weight:700;cursor:pointer}.tab.active{background:#55dccb;color:#071b24;border-color:#55dccb}.view[hidden]{display:none}.view h1,.view h2,.view h3{line-height:1.3}.view h1{font-size:1.8rem}.view h2{font-size:1.45rem;margin-top:30px}.view h3{font-size:1.1rem;margin-top:22px}.view p,.view li{line-height:1.7}.view table{width:100%;border-collapse:collapse;display:block;overflow-x:auto}.view th,.view td{padding:10px;border:1px solid var(--border,#29384f);text-align:left}.view pre{overflow:auto;padding:15px;border-radius:12px;background:#081321;border:1px solid #27364d}.view code{overflow-wrap:anywhere}.view blockquote{border-left:3px solid #55dccb;padding:8px 14px;background:rgba(85,220,203,.07);border-radius:0 10px 10px 0}.quiz-intro{color:var(--muted,#aebbd0)}.quiz-card,.flashcard{border:1px solid var(--border,#29384f);background:rgba(21,35,56,.72);border-radius:14px;padding:18px;margin:14px 0}.quiz-card>p{font-weight:650}.option{display:flex;gap:10px;align-items:flex-start;padding:10px;border:1px solid #29384f;border-radius:9px;margin:8px 0;cursor:pointer}.option:has(input:checked){border-color:#55dccb;background:rgba(85,220,203,.07)}.option input{margin-top:5px}.feedback{margin-top:12px;padding:12px;border-radius:9px;background:rgba(85,220,203,.08);line-height:1.6}.feedback.wrong{background:rgba(255,135,135,.09)}.action{border:0;border-radius:10px;padding:11px 15px;font-weight:750;cursor:pointer;background:#55dccb;color:#061b23;margin:8px 8px 8px 0}.secondary{background:#23344d;color:#e9f0ff}.score{font-weight:800;font-size:1.1rem}.fc-count{font-size:.75rem;color:#72dfd2;font-weight:800;letter-spacing:.08em}.flashcard summary{cursor:pointer;color:#69e2d2;font-weight:700;padding:8px 0}.fc-answer{padding:8px 0;line-height:1.7}.known{display:inline-flex;gap:8px;align-items:center;margin-top:8px;font-size:.9rem}.flashcard:has(.known-check:checked){border-color:#55dccb}.challenge{margin-top:30px}.site-foot{border-top:1px solid #29384f;margin-top:42px;padding-top:20px;color:#9eacc1;font-size:.9rem}.notice{color:#aebbd0;font-size:.9rem}
+</style>
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+        startOnLoad: true,
+        securityLevel: 'loose',
+        theme: 'dark',
+        flowchart: { useMaxWidth: true, htmlLabels: true }
+    });
+</script>
+
+</head><body><main class="lab-wrap"><header class="lab-hero"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><a href="../../../index.html" style="color:#55dccb;font-weight:800">KG-LAB / NETWORKING</a><span class="eyebrow">CCNP ENCOR · PRACTICAL LAB 01</span></div><span class="eyebrow" style="margin-top:28px">HANDS-ON LAB · BGP</span><h1>Lab 01 — eBGP Basics</h1><p>Configuration, verification and analysis of an external BGP peering between AS 65001 and AS 65002. This page brings together the detailed lab report, the full quiz and the flashcards prepared for revision.</p><a class="action back-link" style="text-decoration:none;color:#061b23" href="../index.html">← Back to BGP Labs</a></header>
+<section class="progressbox"><div class="progress-head"><span>Learning progress</span><span id="progress-label">0 of 3 activities complete</span></div><div class="progressline"><div id="progress-fill" class="progressfill"></div></div><p class="notice">Progress is saved locally in this browser.</p></section>
+<nav class="tabs" aria-label="Lab sections"><button class="tab active" data-view="guide">Lab guide</button><button class="tab" data-view="quiz">QCM quiz (15)</button><button class="tab" data-view="flashcards">Flashcards</button><button class="tab" data-view="progress">My progress</button></nav>
+<section id="guide" class="view panel"><h1 id="lab-01-ebgp-basics-configuration-vérification-et-analyse">Lab 01 — eBGP Basics : configuration, vérification et analyse</h1>
+<blockquote>
+<p><strong>Parcours :</strong> CCNP ENCOR — BGP<br />
+<strong>Environnement :</strong> GNS3, deux routeurs Cisco IOSv et deux VPCS<br />
+<strong>Statut :</strong> Réalisé, vérifié et configurations sauvegardées sur R1 et R2<br />
+<strong>Objectif :</strong> établir une session eBGP entre deux systèmes autonomes, annoncer un réseau LAN de chaque côté et valider la connectivité de bout en bout.</p>
+</blockquote>
+<hr />
+<h2 id="objectifs-pédagogiques">1. Objectifs pédagogiques</h2>
+<p>À la fin de ce laboratoire, on doit pouvoir :</p>
+<ul>
+<li>configurer les interfaces d’un routeur Cisco ;</li>
+<li>comprendre le rôle de <code>no shutdown</code>, <code>description</code> et <code>ip address</code> ;</li>
+<li>vérifier l’état des interfaces avec <code>show ip interface brief</code> ;</li>
+<li>configurer une relation eBGP entre deux Autonomous Systems (AS) ;</li>
+<li>interpréter <code>show ip bgp summary</code> ;</li>
+<li>annoncer un réseau avec la commande BGP <code>network</code> ;</li>
+<li>distinguer la table BGP de la table de routage IP ;</li>
+<li>vérifier la réception des préfixes et leur installation dans la RIB ;</li>
+<li>tester la connectivité entre deux LAN distants ;</li>
+<li>sauvegarder la configuration.</li>
+</ul>
+<h2 id="topologie-et-plan-dadressage">2. Topologie et plan d’adressage</h2>
+<pre class="mermaid">
+flowchart LR
+    subgraph NETWORK["Topologie eBGP"]
+        direction LR
+        PC1["PC1<br/>VPCS<br/>192.168.1.10/24<br/>Gateway: 192.168.1.1"]
+        R1["R1<br/>AS 65001<br/>Gi0/1: 192.168.1.1/24<br/>Gi0/0: 192.168.12.1/30"]
+        R2["R2<br/>AS 65002<br/>Gi0/0: 192.168.12.2/30<br/>Gi0/1: 192.168.2.1/24"]
+        PC2["PC2<br/>VPCS<br/>192.168.2.10/24<br/>Gateway: 192.168.2.1"]
+
+        PC1 ---|"LAN 1 / e0 - Gi0/1"| R1
+        R1 <-->|"eBGP - AS 65001 / AS 65002<br/>192.168.12.0/30<br/>Gi0/0 - Gi0/0"| R2
+        R2 ---|"LAN 2 / Gi0/1 - e0"| PC2
+    end
+</pre>
+<table>
+<thead>
+<tr class="header">
+<th>Équipement</th>
+<th>Interface</th>
+<th>Adresse IPv4</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>R1</td>
+<td>Gi0/0</td>
+<td><code>192.168.12.1/30</code></td>
+<td>Liaison inter-routeurs vers R2</td>
+</tr>
+<tr class="even">
+<td>R1</td>
+<td>Gi0/1</td>
+<td><code>192.168.1.1/24</code></td>
+<td>Passerelle du LAN 1</td>
+</tr>
+<tr class="odd">
+<td>R2</td>
+<td>Gi0/0</td>
+<td><code>192.168.12.2/30</code></td>
+<td>Liaison inter-routeurs vers R1</td>
+</tr>
+<tr class="even">
+<td>R2</td>
+<td>Gi0/1</td>
+<td><code>192.168.2.1/24</code></td>
+<td>Passerelle du LAN 2</td>
+</tr>
+<tr class="odd">
+<td>PC1</td>
+<td>NIC VPCS</td>
+<td><code>192.168.1.10/24</code></td>
+<td>Hôte du LAN 1</td>
+</tr>
+<tr class="even">
+<td>PC2</td>
+<td>NIC VPCS</td>
+<td><code>192.168.2.10/24</code></td>
+<td>Hôte du LAN 2</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>AS de R1 : <code>65001</code></li>
+<li>AS de R2 : <code>65002</code></li>
+<li>Réseau de transit : <code>192.168.12.0/30</code></li>
+<li>LAN 1 : <code>192.168.1.0/24</code></li>
+<li>LAN 2 : <code>192.168.2.0/24</code></li>
+</ul>
+<p>Le masque <code>/30</code> fournit quatre adresses au total : réseau, deux adresses utilisables et broadcast. Les adresses utilisables sont ici <code>192.168.12.1</code> et <code>192.168.12.2</code>.</p>
+<h2 id="configuration-de-r1-interfaces">3. Configuration de R1 : interfaces</h2>
+<h3 id="commandes-réellement-exécutées">3.1 Commandes réellement exécutées</h3>
+<pre class="text"><code>conf t
+hostname R1
+do show ip interface brief
+interface range g0/0-1
+ no shut
+exit
+interface g0/0
+ desc ## Link to R2-G0/0 ##
+ ip add 192.168.12.1 255.255.255.252
+int g0/1
+ desc ## Link to R1-LAN ##
+ ip add 192.168.1.1 255.255.255.0
+do show ip int brief | exclud un
+do wr</code></pre>
+<h3 id="rôle-des-commandes">3.2 Rôle des commandes</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Commande</th>
+<th>Explication</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>conf t</code></td>
+<td>Entre en mode de configuration globale (<code>configure terminal</code>).</td>
+</tr>
+<tr class="even">
+<td><code>hostname R1</code></td>
+<td>Définit le nom du routeur pour identifier clairement l’équipement dans le terminal.</td>
+</tr>
+<tr class="odd">
+<td><code>do show ip interface brief</code></td>
+<td>Lance une commande EXEC depuis le mode de configuration. La sortie initiale complète n’a pas été conservée dans le journal récapitulatif.</td>
+</tr>
+<tr class="even">
+<td><code>interface range g0/0-1</code></td>
+<td>Sélectionne simultanément les interfaces GigabitEthernet 0/0 et 0/1.</td>
+</tr>
+<tr class="odd">
+<td><code>no shut</code></td>
+<td>Active administrativement les interfaces sélectionnées (<code>no shutdown</code>).</td>
+</tr>
+<tr class="even">
+<td><code>exit</code></td>
+<td>Quitte le sous-mode d’interface.</td>
+</tr>
+<tr class="odd">
+<td><code>interface g0/0</code></td>
+<td>Entre dans la configuration de Gi0/0.</td>
+</tr>
+<tr class="even">
+<td><code>desc ## Link to R2-G0/0 ##</code></td>
+<td>Ajoute une description destinée à identifier le lien vers Gi0/0 de R2. La description n’active pas le lien et n’influence pas BGP.</td>
+</tr>
+<tr class="odd">
+<td><code>ip add 192.168.12.1 255.255.255.252</code></td>
+<td>Configure l’adresse IPv4 et le masque <code>/30</code> de la liaison inter-routeurs.</td>
+</tr>
+<tr class="even">
+<td><code>int g0/1</code></td>
+<td>Abréviation de <code>interface GigabitEthernet0/1</code>.</td>
+</tr>
+<tr class="odd">
+<td><code>desc ## Link to R1-LAN ##</code></td>
+<td>Documente le rôle de l’interface reliée au LAN local de R1.</td>
+</tr>
+<tr class="even">
+<td><code>ip add 192.168.1.1 255.255.255.0</code></td>
+<td>Configure la passerelle du réseau <code>192.168.1.0/24</code>.</td>
+</tr>
+<tr class="odd">
+<td><code>do show ip int brief \| exclud un</code></td>
+<td>Affiche un résumé des interfaces et filtre les lignes contenant <code>un</code>. C’est une vérification rapide, mais il faut connaître le filtre utilisé et ne pas le confondre avec une vérification exhaustive.</td>
+</tr>
+<tr class="even">
+<td><code>do wr</code></td>
+<td>Sauvegarde la configuration courante dans la configuration de démarrage sur cette plateforme IOS.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Point d’attention observé pendant le TP :</strong> une faute de saisie dans le masque (<code>255.255..255.0</code>) a été corrigée immédiatement. Le masque final configuré sur Gi0/1 est bien <code>255.255.255.0</code>.</p>
+<h3 id="résultat-observé">3.3 Résultat observé</h3>
+<p>Les deux interfaces de R1 ont ensuite été observées avec les adresses prévues et l’état <strong>up/up</strong> :</p>
+<ul>
+<li>Gi0/0 : <code>192.168.12.1</code>, liaison vers R2 ;</li>
+<li>Gi0/1 : <code>192.168.1.1</code>, liaison vers le LAN 1.</li>
+</ul>
+<blockquote>
+<p>La sortie intégrale ligne par ligne de <code>show ip interface brief</code> n’est pas reproduite ici, car elle n’est pas présente dans le journal disponible. Les adresses et états ci-dessus sont les résultats qui ont été confirmés pendant la séance.</p>
+</blockquote>
+<h2 id="configuration-de-r2-interfaces">4. Configuration de R2 : interfaces</h2>
+<h3 id="commandes-réellement-exécutées-1">4.1 Commandes réellement exécutées</h3>
+<pre class="text"><code>conf t
+hostname R2
+interface range g0/0-1
+ no shut
+interface g0/0
+ desc ## Link to R1-G0/0 ##
+ ip add 192.168.12.2 255.255.255.252
+int g0/1
+ desc ## Link to R2-LAN ##
+ ip add 192.168.2.1 255.255.255.0
+do show ip int brief | exclud un
+do wr</code></pre>
+<h3 id="rôle-et-résultat">4.2 Rôle et résultat</h3>
+<p>La logique est identique à celle de R1 :</p>
+<ul>
+<li><code>hostname R2</code> identifie le second routeur ;</li>
+<li><code>interface range g0/0-1</code> sélectionne les deux interfaces ;</li>
+<li><code>no shut</code> les active ;</li>
+<li>Gi0/0 reçoit <code>192.168.12.2/30</code>, l’adresse de R2 sur le lien de transit ;</li>
+<li>Gi0/1 reçoit <code>192.168.2.1/24</code>, la passerelle du LAN 2 ;</li>
+<li>la commande <code>do show ip int brief | exclud un</code> sert à vérifier rapidement les interfaces ;</li>
+<li><code>do wr</code> sauvegarde la configuration.</li>
+</ul>
+<p>Les deux interfaces de R2 ont été confirmées <strong>up/up</strong>, avec les adresses prévues.</p>
+<h2 id="tests-de-connectivité-avant-bgp">5. Tests de connectivité avant BGP</h2>
+<h3 id="ping-du-lien-de-transit-depuis-r2">5.1 Ping du lien de transit depuis R2</h3>
+<p>Commande exécutée :</p>
+<pre class="text"><code>do ping 192.168.12.1</code></pre>
+<p>Premier résultat rapporté :</p>
+<pre class="text"><code>!!!!.</code></pre>
+<p>Le résultat correspond à 4 réponses réussies sur 5, soit 80 %. Lors du premier échange, la résolution ARP peut expliquer un premier paquet perdu pendant l’apprentissage de l’adresse MAC, mais ce n’est pas une certitude déductible du seul symbole. Le point important est de refaire le test.</p>
+<p>Deuxième résultat rapporté : <code>!!!!!</code>, soit 5 réponses réussies sur 5 (100 %).</p>
+<p><strong>Conclusion :</strong> la connectivité IPv4 entre <code>192.168.12.2</code> et <code>192.168.12.1</code> est fonctionnelle.</p>
+<h3 id="configuration-de-pc1-et-test-de-sa-passerelle">5.2 Configuration de PC1 et test de sa passerelle</h3>
+<p>Commandes VPCS exécutées :</p>
+<pre class="text"><code>PC1&gt; ip 192.168.1.10/24 192.168.1.1</code></pre>
+<p>Sortie exacte conservée :</p>
+<pre class="text"><code>Checking for duplicate address...
+PC1 : 192.168.1.10 255.255.255.0 gateway 192.168.1.1</code></pre>
+<p>Puis :</p>
+<pre class="text"><code>PC1&gt; ping 192.168.1.1</code></pre>
+<p>Résultat observé : les cinq requêtes ont reçu une réponse.</p>
+<p>Interprétation :</p>
+<ul>
+<li>l’adresse de PC1 est <code>192.168.1.10/24</code> ;</li>
+<li>sa passerelle par défaut est <code>192.168.1.1</code> ;</li>
+<li>le ping confirme que PC1 peut joindre l’interface LAN de R1.</li>
+</ul>
+<h3 id="configuration-de-pc2-et-test-de-sa-passerelle">5.3 Configuration de PC2 et test de sa passerelle</h3>
+<p>Commandes VPCS exécutées :</p>
+<pre class="text"><code>PC2&gt; ip 192.168.2.10/24 192.168.2.1</code></pre>
+<p>Sortie exacte conservée :</p>
+<pre class="text"><code>Checking for duplicate address...
+PC2 : 192.168.2.10 255.255.255.0 gateway 192.168.2.1</code></pre>
+<p>Puis :</p>
+<pre class="text"><code>PC2&gt; ping 192.168.2.1</code></pre>
+<p>Résultat observé : les cinq requêtes ont reçu une réponse.</p>
+<p><strong>Bilan avant BGP :</strong> chaque PC joint sa passerelle et le lien entre les routeurs fonctionne. Cela valide la configuration locale, mais ne prouve pas encore que les deux LAN peuvent communiquer entre eux.</p>
+<h2 id="configuration-de-la-session-ebgp">6. Configuration de la session eBGP</h2>
+<h3 id="r1-as-65001">6.1 R1 — AS 65001</h3>
+<p>Commandes réellement exécutées :</p>
+<pre class="text"><code>enable
+configure terminal
+router bgp 65001
+ neighbor 192.168.12.2 remote-as 65002
+end</code></pre>
+<p>Explication :</p>
+<ul>
+<li><code>enable</code> passe en mode EXEC privilégié ;</li>
+<li><code>configure terminal</code> ouvre la configuration globale ;</li>
+<li><code>router bgp 65001</code> active le processus BGP local avec l’AS <code>65001</code> ;</li>
+<li><code>neighbor 192.168.12.2 remote-as 65002</code> déclare le voisin BGP à l’adresse <code>192.168.12.2</code> et précise que son AS est <code>65002</code> ;</li>
+<li><code>end</code> quitte le mode de configuration.</li>
+</ul>
+<h3 id="première-vérification-sur-r1-avant-la-configuration-de-r2">6.2 Première vérification sur R1, avant la configuration de R2</h3>
+<p>Commande : <code>show ip bgp summary</code></p>
+<p>Sortie conservée :</p>
+<pre class="text"><code>Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+192.168.12.2    4        65002       0       0        1    0    0 never    Idle</code></pre>
+<p>Interprétation :</p>
+<ul>
+<li><code>Neighbor</code> : adresse du voisin configuré ;</li>
+<li><code>V 4</code> : version BGP utilisée, BGP-4 ;</li>
+<li><code>AS 65002</code> : AS distant attendu ;</li>
+<li><code>MsgRcvd</code> / <code>MsgSent</code> à <code>0</code> : aucun message BGP échangé à ce stade ;</li>
+<li><code>Up/Down never</code> : aucune session établie auparavant depuis le démarrage de ce processus ;</li>
+<li><code>Idle</code> : la session n’est pas établie.</li>
+</ul>
+<p><strong>Pourquoi c’était normal à ce moment-là :</strong> R2 n’avait pas encore reçu sa configuration BGP. Un voisin déclaré sur un seul côté ne suffit pas à établir la session.</p>
+<h3 id="r2-as-65002">6.3 R2 — AS 65002</h3>
+<p>Commandes réellement exécutées :</p>
+<pre class="text"><code>enable
+configure terminal
+router bgp 65002
+ neighbor 192.168.12.1 remote-as 65001
+end</code></pre>
+<p>La configuration est symétrique :</p>
+<ul>
+<li>R2 utilise l’AS local <code>65002</code> ;</li>
+<li>il déclare <code>192.168.12.1</code> comme voisin ;</li>
+<li>il attend l’AS distant <code>65001</code>.</li>
+</ul>
+<h3 id="vérification-de-la-session-après-configuration-des-deux-côtés">6.4 Vérification de la session après configuration des deux côtés</h3>
+<p>Sortie conservée sur R2 :</p>
+<pre class="text"><code>Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+192.168.12.1    4        65001       4       4        1    0    0 00:00:18        0</code></pre>
+<p>Sortie conservée sur R1 :</p>
+<pre class="text"><code>Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+192.168.12.2    4        65002       4       4        1    0    0 00:00:40        0</code></pre>
+<p>Interprétation :</p>
+<ul>
+<li>les compteurs <code>MsgRcvd</code> et <code>MsgSent</code> sont désormais non nuls ;</li>
+<li><code>Up/Down</code> affiche une durée plutôt que <code>never</code> ;</li>
+<li>la dernière colonne affiche <code>0</code>, ce qui signifie que la session est établie mais qu’aucun préfixe n’a encore été reçu de ce voisin ;</li>
+<li>dans cette sortie, un nombre dans <code>State/PfxRcd</code> représente le nombre de préfixes reçus ; un état comme <code>Idle</code> ou <code>Active</code> indique au contraire que la session n’est pas encore établie.</li>
+</ul>
+<p><strong>Conclusion intermédiaire :</strong> la session eBGP entre AS 65001 et AS 65002 est établie. La prochaine étape consiste à échanger des routes.</p>
+<h2 id="annonce-des-réseaux-lan-avec-bgp">7. Annonce des réseaux LAN avec BGP</h2>
+<h3 id="annonce-du-lan-de-r1">7.1 Annonce du LAN de R1</h3>
+<p>Commandes réellement exécutées :</p>
+<pre class="text"><code>configure terminal
+router bgp 65001
+ network 192.168.1.0 mask 255.255.255.0
+end</code></pre>
+<p><code>network 192.168.1.0 mask 255.255.255.0</code> demande à BGP d’annoncer le préfixe <code>192.168.1.0/24</code>. Sur IOS, la route correspondante doit exister dans la table de routage avec le masque exact pour que l’annonce soit originaire de ce routeur. Ici, le réseau est directement connecté à Gi0/1 de R1.</p>
+<h3 id="annonce-du-lan-de-r2">7.2 Annonce du LAN de R2</h3>
+<p>Commandes réellement exécutées :</p>
+<pre class="text"><code>configure terminal
+router bgp 65002
+ network 192.168.2.0 mask 255.255.255.0
+end</code></pre>
+<p>R2 annonce de la même manière son réseau connecté <code>192.168.2.0/24</code>.</p>
+<p><strong>À retenir :</strong> déclarer un voisin BGP établit la relation de peering ; annoncer un préfixe est une action distincte. Une session peut donc être établie tout en ne transportant aucune route.</p>
+<h2 id="vérifier-la-table-bgp-et-les-routes-apprises">8. Vérifier la table BGP et les routes apprises</h2>
+<h3 id="table-bgp-de-r2">8.1 Table BGP de R2</h3>
+<p>Commande : <code>show ip bgp</code></p>
+<p>Sortie exacte conservée :</p>
+<pre class="text"><code>     Network          Next Hop            Metric LocPrf Weight Path
+ *&gt;   192.168.1.0      192.168.12.1             0             0 65001 i
+ *&gt;   192.168.2.0      0.0.0.0                  0         32768 i</code></pre>
+<p>Interprétation :</p>
+<ul>
+<li><code>Network</code> : préfixe connu de BGP ;</li>
+<li><code>Next Hop</code> : prochain saut à utiliser pour atteindre le préfixe ;</li>
+<li><code>Metric</code> : attribut MED, affiché ici à <code>0</code> ;</li>
+<li><code>LocPrf</code> : Local Preference, sans valeur affichée dans ces lignes ;</li>
+<li><code>Weight</code> : attribut Cisco local au routeur, pas un attribut échangé entre routeurs ;</li>
+<li><code>Path</code> : chemin AS et indicateur d’origine ;</li>
+<li><code>*</code> : route valide ;</li>
+<li><code>&gt;</code> : meilleur chemin sélectionné par BGP ;</li>
+<li><code>192.168.1.0</code> a pour prochain saut <code>192.168.12.1</code> et porte l’AS <code>65001</code> dans le chemin : R2 l’a appris de R1 ;</li>
+<li><code>192.168.2.0</code> a <code>0.0.0.0</code> comme prochain saut, ce qui indique que ce préfixe est originaire de R2 lui-même ;</li>
+<li><code>32768</code> comme Weight pour le préfixe local est la valeur Cisco par défaut couramment attribuée à une route originaire du routeur.</li>
+</ul>
+<p>Le <code>i</code> final est le code d’origine BGP : le préfixe a été introduit par une commande <code>network</code> ou une autre méthode d’origine équivalente, plutôt que d’être appris comme route externe EGP historique.</p>
+<h3 id="routes-bgp-installées-dans-la-table-de-routage-de-r2">8.2 Routes BGP installées dans la table de routage de R2</h3>
+<p>Commande : <code>show ip route bgp</code></p>
+<p>Sortie exacte conservée :</p>
+<pre class="text"><code>B     192.168.1.0/24 [20/0] via 192.168.12.1, 00:01:32</code></pre>
+<p>Interprétation :</p>
+<ul>
+<li><code>B</code> indique une route apprise par BGP ;</li>
+<li><code>192.168.1.0/24</code> est le LAN distant de R1 ;</li>
+<li><code>[20/0]</code> signifie <strong>distance administrative 20 / métrique BGP 0</strong> dans cette entrée ;</li>
+<li><strong>Distance administrative (AD) = 20 :</strong> sur Cisco IOS, la distance administrative sert à départager des routes vers le même préfixe apprises par différentes sources de routage. Plus la valeur est faible, plus la source est préférée. La valeur par défaut d’eBGP est <code>20</code>; à titre de comparaison, une route OSPF a généralement une AD de <code>110</code> et une route RIP de <code>120</code>. Ainsi, si le même préfixe est disponible via eBGP et OSPF, et qu’aucune autre règle ou particularité ne change la décision, IOS préfère normalement la route eBGP grâce à son AD plus faible. Cette valeur n’est pas l’attribut BGP <code>MED</code> et n’est pas la métrique affichée comme deuxième nombre ;</li>
+<li><strong>Métrique = 0 :</strong> c’est la métrique associée à cette entrée de route BGP dans cette sortie. Ne pas confondre cette valeur avec l’AD <code>20</code> ;</li>
+<li><code>via 192.168.12.1</code> désigne le prochain saut ;</li>
+<li><code>00:01:32</code> est l’âge de la route au moment où la sortie a été capturée.</li>
+</ul>
+<p>La route BGP du LAN 1 est donc présente dans la table de routage IP de R2.</p>
+<h3 id="résumé-bgp-de-r2-après-lannonce">8.3 Résumé BGP de R2 après l’annonce</h3>
+<p>Sortie exacte conservée :</p>
+<pre class="text"><code>Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+192.168.12.1    4        65001       9       9        3    0    0 00:05:13        1</code></pre>
+<p>La colonne <code>State/PfxRcd</code> affiche <code>1</code> : R2 reçoit maintenant un préfixe de son voisin R1.</p>
+<h3 id="table-bgp-de-r1">8.4 Table BGP de R1</h3>
+<p>Commande : <code>show ip bgp</code></p>
+<p>Sortie exacte conservée :</p>
+<pre class="text"><code>     Network          Next Hop            Metric LocPrf Weight Path
+ *&gt;   192.168.1.0      0.0.0.0                  0         32768 i
+ *&gt;   192.168.2.0      192.168.12.2             0             0 65002 i</code></pre>
+<p>Interprétation :</p>
+<ul>
+<li><code>192.168.1.0</code> est le préfixe local de R1 : prochain saut <code>0.0.0.0</code> et Weight <code>32768</code> ;</li>
+<li><code>192.168.2.0</code> est le LAN distant appris de R2 ;</li>
+<li>son prochain saut est <code>192.168.12.2</code> ;</li>
+<li>le chemin AS contient <code>65002</code>, ce qui indique que le préfixe a été appris depuis l’AS 65002 ;</li>
+<li>les marqueurs <code>*&gt;</code> indiquent que les routes sont valides et sélectionnées comme meilleurs chemins.</li>
+</ul>
+<h3 id="route-bgp-installée-sur-r1">8.5 Route BGP installée sur R1</h3>
+<p>Commande : <code>show ip route bgp</code></p>
+<p>Sortie exacte conservée :</p>
+<pre class="text"><code>B     192.168.2.0/24 [20/0] via 192.168.12.2, 00:01:37</code></pre>
+<p>R1 a installé le LAN 2 dans sa table de routage IP via R2.</p>
+<h3 id="résumé-bgp-de-r1-après-lannonce">8.6 Résumé BGP de R1 après l’annonce</h3>
+<p>Sortie exacte conservée :</p>
+<pre class="text"><code>Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+192.168.12.2    4        65002      10      10        3    0    0 00:06:05        1</code></pre>
+<p>La colonne <code>State/PfxRcd</code> vaut <code>1</code> : R1 reçoit un préfixe de R2.</p>
+<p><strong>Bilan de routage :</strong> chaque routeur connaît son LAN local et a appris le LAN distant par eBGP. Les deux routes distantes sont présentes dans les tables de routage IP.</p>
+<h2 id="tests-de-bout-en-bout">9. Tests de bout en bout</h2>
+<h3 id="depuis-r1-vers-pc2">9.1 Depuis R1 vers PC2</h3>
+<p>Commande et sortie exactes conservées :</p>
+<pre class="text"><code>R1#ping 192.168.2.10
+Sending 5, 100-byte ICMP Echos to 192.168.2.10, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms</code></pre>
+<p>Interprétation :</p>
+<ul>
+<li>R1 envoie cinq requêtes ICMP à <code>192.168.2.10</code> ;</li>
+<li>chaque <code>!</code> indique une réponse reçue ;</li>
+<li><code>5/5</code> correspond à 100 % de réussite ;</li>
+<li>le temps aller-retour minimal/moyen/maximal est de <code>1/1/2 ms</code> dans ce test.</li>
+</ul>
+<h3 id="depuis-pc2-vers-pc1">9.2 Depuis PC2 vers PC1</h3>
+<p>Commande et sortie exactes conservées :</p>
+<pre class="text"><code>PC2&gt; ping 192.168.1.10
+
+84 bytes from 192.168.1.10 icmp_seq=1 ttl=62 time=2.046 ms
+84 bytes from 192.168.1.10 icmp_seq=2 ttl=62 time=0.953 ms
+84 bytes from 192.168.1.10 icmp_seq=3 ttl=62 time=0.993 ms
+84 bytes from 192.168.1.10 icmp_seq=4 ttl=62 time=0.886 ms
+84 bytes from 192.168.1.10 icmp_seq=5 ttl=62 time=1.049 ms</code></pre>
+<p>Interprétation :</p>
+<ul>
+<li>PC2 joint PC1 à travers les deux routeurs ;</li>
+<li>les cinq réponses confirment que le trafic passe dans le sens LAN 2 vers LAN 1 ;</li>
+<li><code>ttl=62</code> est le TTL restant dans les réponses reçues ; sa valeur dépend du TTL initial et du nombre de sauts traversés ;</li>
+<li>les temps rapportés sont les temps aller-retour mesurés par VPCS.</li>
+</ul>
+<p><strong>Validation finale :</strong> les tests démontrent une connectivité bidirectionnelle entre PC1 et PC2, avec cinq réponses sur cinq dans les deux sens observés.</p>
+<h2 id="sauvegarde-de-la-configuration">10. Sauvegarde de la configuration</h2>
+<p>Les configurations de R1 et R2 ont été sauvegardées après la validation.</p>
+<p>Commande de sauvegarde standard à connaître :</p>
+<pre class="text"><code>copy running-config startup-config</code></pre>
+<p>Sur IOS, le routeur peut demander le nom du fichier de destination ; appuyer sur Entrée pour accepter le nom par défaut proposé. Dans cette séance, les sauvegardes ont été confirmées par l’utilisateur. Les sorties textuelles complètes de sauvegarde ne sont pas disponibles dans le journal récapitulatif, donc elles ne sont pas inventées ici.</p>
+<p>Différence importante :</p>
+<ul>
+<li><code>running-config</code> : configuration actuellement en mémoire vive ;</li>
+<li><code>startup-config</code> : configuration utilisée au démarrage suivant.</li>
+</ul>
+<h2 id="commandes-de-vérification-à-mémoriser">11. Commandes de vérification à mémoriser</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Commande</th>
+<th>Question à laquelle elle répond</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>show ip interface brief</code></td>
+<td>Quelles sont les adresses et l’état des interfaces ?</td>
+</tr>
+<tr class="even">
+<td><code>show ip route</code></td>
+<td>Quelles routes sont installées dans la table de routage IP ?</td>
+</tr>
+<tr class="odd">
+<td><code>show ip route bgp</code></td>
+<td>Quelles routes BGP sont installées dans la table de routage ?</td>
+</tr>
+<tr class="even">
+<td><code>show ip bgp</code></td>
+<td>Quels préfixes BGP sont connus et quels chemins sont sélectionnés ?</td>
+</tr>
+<tr class="odd">
+<td><code>show ip bgp summary</code></td>
+<td>La session BGP est-elle établie et combien de préfixes le voisin envoie-t-il ?</td>
+</tr>
+<tr class="even">
+<td><code>ping &lt;adresse&gt;</code></td>
+<td>La destination est-elle joignable au niveau IP ?</td>
+</tr>
+<tr class="odd">
+<td><code>copy running-config startup-config</code></td>
+<td>La configuration est-elle enregistrée pour le prochain démarrage ?</td>
+</tr>
+</tbody>
+</table>
+<h2 id="dépannage-méthode-utilisée-pour-raisonner">12. Dépannage : méthode utilisée pour raisonner</h2>
+<p>Si la session BGP ne monte pas :</p>
+<ol type="1">
+<li>vérifier les interfaces avec <code>show ip interface brief</code> ;</li>
+<li>vérifier la connectivité IP de la liaison de transit avec <code>ping</code> ;</li>
+<li>contrôler les adresses de voisin et les AS distants sous <code>router bgp</code> ;</li>
+<li>relire <code>show ip bgp summary</code> et examiner <code>State/PfxRcd</code> ;</li>
+<li>une fois la session établie, contrôler l’annonce des préfixes et les routes dans <code>show ip bgp</code> ;</li>
+<li>vérifier l’installation des routes avec <code>show ip route bgp</code> ;</li>
+<li>tester enfin la connectivité entre les hôtes.</li>
+</ol>
+<p>Dans ce TP, le voisin était initialement en état <code>Idle</code> parce que R2 n’avait pas encore été configuré. Après la configuration BGP des deux côtés, la session s’est établie. Ensuite, les annonces <code>network</code> ont permis l’échange des deux préfixes LAN.</p>
+<h2 id="résultats-vérifiés">13. Résultats vérifiés</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" checked="" />Interfaces de R1 configurées et confirmées up/up.</label></li>
+<li><label><input type="checkbox" checked="" />Interfaces de R2 configurées et confirmées up/up.</label></li>
+<li><label><input type="checkbox" checked="" />PC1 configuré et ping de sa passerelle réussi.</label></li>
+<li><label><input type="checkbox" checked="" />PC2 configuré et ping de sa passerelle réussi.</label></li>
+<li><label><input type="checkbox" checked="" />Ping du lien de transit réussi après un second essai.</label></li>
+<li><label><input type="checkbox" checked="" />Session eBGP entre AS 65001 et AS 65002 établie.</label></li>
+<li><label><input type="checkbox" checked="" />LAN 1 annoncé par R1 et appris par R2.</label></li>
+<li><label><input type="checkbox" checked="" />LAN 2 annoncé par R2 et appris par R1.</label></li>
+<li><label><input type="checkbox" checked="" />Routes distantes présentes dans les tables de routage.</label></li>
+<li><label><input type="checkbox" checked="" />Ping R1 vers PC2 réussi à 100 %.</label></li>
+<li><label><input type="checkbox" checked="" />Ping PC2 vers PC1 : cinq réponses reçues.</label></li>
+<li><label><input type="checkbox" checked="" />Configurations sauvegardées sur R1 et R2.</label></li>
+</ul>
+<h2 id="questions-de-révision">14. Questions de révision</h2>
+<ol type="1">
+<li>Pourquoi une session BGP peut-elle être établie sans qu’aucun préfixe ne soit reçu ?</li>
+<li>Que signifie <code>State/PfxRcd = 1</code> dans <code>show ip bgp summary</code> ?</li>
+<li>Pourquoi le prochain saut d’une route locale apparaît-il comme <code>0.0.0.0</code> dans la table BGP ?</li>
+<li>Quelle différence existe entre <code>show ip bgp</code> et <code>show ip route bgp</code> ?</li>
+<li>Pourquoi la commande <code>network 192.168.1.0 mask 255.255.255.0</code> doit-elle correspondre à un préfixe présent dans la table de routage ?</li>
+<li>Dans la sortie BGP, que signifient les marqueurs <code>*</code> et <code>&gt;</code> ?</li>
+<li>Que représente le Weight <code>32768</code> de la route locale sur IOS ?</li>
+<li>Pourquoi les tests de ping entre les deux PC sont-ils plus probants que le seul état Established de BGP ?</li>
+<li>Quelle différence existe entre <code>running-config</code> et <code>startup-config</code> ?</li>
+<li>Si <code>show ip bgp</code> affiche une route mais que le ping échoue, quelles vérifications effectuer ensuite ?</li>
+</ol>
+</section>
+<section id="quiz" class="view" hidden><div class="panel"><h1>Part A — Multiple-choice questions</h1><p class="quiz-intro">Answer all 15 questions. Select one option for each question, then check your answers to see explanations.</p><div id="quiz-list"><article class="quiz-card" data-answer="B" data-q="1" data-explanation="The number identifies the local Autonomous System (AS) used by the BGP process."><h3>Question 1</h3><p>What is the purpose of `router bgp 65001` on R1?</p><label class="option"><input type="radio" name="q1" value="A"><span><b>A.</b> Configure the IPv4 address of Gi0/0</span></label><label class="option"><input type="radio" name="q1" value="B"><span><b>B.</b> Configure the local BGP process in AS 65001</span></label><label class="option"><input type="radio" name="q1" value="C"><span><b>C.</b> Add a static route to R2</span></label><label class="option"><input type="radio" name="q1" value="D"><span><b>D.</b> Enable every interface on the router</span></label><div class="feedback" hidden></div></article><article class="quiz-card" data-answer="C" data-q="2" data-explanation="R1 defines `192.168.12.2` as its BGP neighbor and expects that neighbor to belong to AS 65002."><h3>Question 2</h3><p>What does this command specify on R1?</p><label class="option"><input type="radio" name="q2" value="A"><span><b>A.</b> The LAN prefix advertised by R1</span></label><label class="option"><input type="radio" name="q2" value="B"><span><b>B.</b> PC2&#x27;s address</span></label><label class="option"><input type="radio" name="q2" value="C"><span><b>C.</b> The BGP neighbor&#x27;s IP address and its remote AS</span></label><label class="option"><input type="radio" name="q2" value="D"><span><b>D.</b> The subnet mask of the inter-router link</span></label><div class="feedback" hidden></div></article><article class="quiz-card" data-answer="B" data-q="3" data-explanation="At that point in the lab, R2 had not yet been configured for the BGP peering."><h3>Question 3</h3><p>In R1&#x27;s initial BGP summary, what does `Idle` mean?</p><label class="option"><input type="radio" name="q3" value="A"><span><b>A.</b> The neighbor has advertised a prefix</span></label><label class="option"><input type="radio" name="q3" value="B"><span><b>B.</b> The BGP session is not established</span></label><label class="option"><input type="radio" name="q3" value="C"><span><b>C.</b> The router has selected the best path</span></label><label class="option"><input type="radio" name="q3" value="D"><span><b>D.</b> The ping to PC2 is successful</span></label><div class="feedback" hidden></div></article><article class="quiz-card" data-answer="C" data-q="4" data-explanation=""><h3>Question 4</h3><p>After the session is established, what does `State/PfxRcd = 0` mean in `show ip bgp summary`?</p><label class="option"><input type="radio" name="q4" value="A"><span><b>A.</b> The session is necessarily down</span></label><label class="option"><input type="radio" name="q4" value="B"><span><b>B.</b> The router has received zero bytes</span></label><label class="option"><input type="radio" name="q4" value="C"><span><b>C.</b> The session is established, but no prefixes have been received from that neighbor</span></label><label class="option"><input type="radio" name="q4" value="D"><span><b>D.</b> The neighbor is using BGP version 0</span></label><div class="feedback" hidden></div></article><article class="quiz-card" data-answer="A" data-q="5" data-explanation=""><h3>Question 5</h3><p>Which prefix does R1 advertise with this command?</p><label class="option"><input type="radio" name="q5" value="A"><span><b>A.</b> `192.168.1.0/24`</span></label><label class="option"><input type="radio" name="q5" value="B"><span><b>B.</b> `192.168.12.0/30`</span></label><label class="option"><input type="radio" name="q5" value="C"><span><b>C.</b> `192.168.2.0/24`</span></label><label class="option"><input type="radio" name="q5" value="D"><span><b>D.</b> `192.168.1.1/32`</span></label><div class="feedback" hidden></div></article><article class="quiz-card" data-answer="B" data-q="6" data-explanation=""><h3>Question 6</h3><p>On Cisco IOS, what is an important requirement for a BGP `network` command to originate a prefix?</p><label class="option"><input type="radio" name="q6" value="A"><span><b>A.</b> The prefix must be configured on a Loopback interface only</span></label><label class="option"><input type="radio" name="q6" value="B"><span><b>B.</b> A matching route with the exact prefix and mask must exist in the routing table</span></label><label class="option"><input type="radio" name="q6" value="C"><span><b>C.</b> The router must have a default route</span></label><label class="option"><input type="radio" name="q6" value="D"><span><b>D.</b> The neighbor must be in the same AS</span></label><div class="feedback" hidden></div></article><article class="quiz-card" data-answer="A" data-q="7" data-explanation="`*` marks a valid path, `&gt;` marks the best path, the next hop is R1, and the AS path contains `65001`."><h3>Question 7</h3><p>In R2&#x27;s BGP table, what does this entry indicate?</p><label class="option"><input type="radio" name="q7" value="A"><span><b>A.</b> The LAN 1 prefix was learned from R1 through `192.168.12.1`, and this is the valid best path</span></label><label class="option"><input type="radio" name="q7" value="B"><span><b>B.</b> LAN 1 is directly connected to R2</span></label><label class="option"><input type="radio" name="q7" value="C"><span><b>C.</b> The BGP session is in the Idle state</span></label><label class="option"><input type="radio" name="q7" value="D"><span><b>D.</b> R2 is advertising LAN 2 to R1</span></label><div class="feedback" hidden></div></article><article class="quiz-card" data-answer="B" data-q="8" data-explanation=""><h3>Question 8</h3><p>What does `0.0.0.0` as the next hop for a locally originated prefix mean in `show ip bgp`?</p><label class="option"><input type="radio" name="q8" value="A"><span><b>A.</b> It is the IP address of the BGP neighbor</span></label><label class="option"><input type="radio" name="q8" value="B"><span><b>B.</b> The prefix originated on the local router</span></label><label class="option"><input type="radio" name="q8" value="C"><span><b>C.</b> The route is invalid</span></label><label class="option"><input type="radio" name="q8" value="D"><span><b>D.</b> The subnet mask is unknown</span></label><div class="feedback" hidden></div></article><article class="quiz-card" data-answer="B" data-q="9" data-explanation=""><h3>Question 9</h3><p>What does `show ip route bgp` display?</p><label class="option"><input type="radio" name="q9" value="A"><span><b>A.</b> Only configured BGP neighbors</span></label><label class="option"><input type="radio" name="q9" value="B"><span><b>B.</b> BGP routes installed in the IP routing table</span></label><label class="option"><input type="radio" name="q9" value="C"><span><b>C.</b> The startup configuration</span></label><label class="option"><input type="radio" name="q9" value="D"><span><b>D.</b> It resets BGP sessions</span></label><div class="feedback" hidden></div></article><article class="quiz-card" data-answer="B" data-q="10" data-explanation=" On Cisco IOS, the first number is the administrative distance (AD), and the second is the route metric. The default AD for eBGP is `20`. AD is used to compare routes to the same destination learned from different routing sources; a lower AD is preferred. For example, the usual AD values are eBGP `20`, OSPF `110`, and RIP `120`. Therefore, when the same prefix is available from eBGP and OSPF, IOS normally prefers the eBGP route based on AD, assuming no other relevant conditions change the decision. Administrative distance is a local router decision value; it is not the BGP MED attribute."><h3>Question 10</h3><p>In this route entry, what does `[20/0]` mean?</p><label class="option"><input type="radio" name="q10" value="A"><span><b>A.</b> AS 20 and VLAN 0</span></label><label class="option"><input type="radio" name="q10" value="B"><span><b>B.</b> Administrative distance 20 and route metric 0</span></label><label class="option"><input type="radio" name="q10" value="C"><span><b>C.</b> 20 received prefixes and zero neighbors</span></label><label class="option"><input type="radio" name="q10" value="D"><span><b>D.</b> 20 ms latency and 0% packet loss</span></label><div class="feedback" hidden></div></article><article class="quiz-card" data-answer="B" data-q="11" data-explanation="Weight is a Cisco-specific attribute local to the router; it is not advertised to BGP neighbors."><h3>Question 11</h3><p>In the IOS output from this lab, what does Weight `32768` on a locally originated prefix indicate?</p><label class="option"><input type="radio" name="q11" value="A"><span><b>A.</b> The prefix has crossed 32768 autonomous systems</span></label><label class="option"><input type="radio" name="q11" value="B"><span><b>B.</b> It is the Cisco-local Weight value commonly assigned to a prefix originated by the router</span></label><label class="option"><input type="radio" name="q11" value="C"><span><b>C.</b> It is the Local Preference advertised to the neighbor</span></label><label class="option"><input type="radio" name="q11" value="D"><span><b>D.</b> It is the number of routes received</span></label><div class="feedback" hidden></div></article><article class="quiz-card" data-answer="C" data-q="12" data-explanation=""><h3>Question 12</h3><p>Which result best demonstrates IP connectivity between the two LANs in this lab?</p><label class="option"><input type="radio" name="q12" value="A"><span><b>A.</b> Seeing `router bgp 65001` in the configuration</span></label><label class="option"><input type="radio" name="q12" value="B"><span><b>B.</b> Seeing a neighbor configured</span></label><label class="option"><input type="radio" name="q12" value="C"><span><b>C.</b> Successful pings between PC1 and PC2 in both directions</span></label><label class="option"><input type="radio" name="q12" value="D"><span><b>D.</b> Seeing the hostname R1 in the terminal</span></label><div class="feedback" hidden></div></article><article class="quiz-card" data-answer="A" data-q="13" data-explanation=""><h3>Question 13</h3><p>What does `!!!!!` indicate in the Cisco ping output?</p><label class="option"><input type="radio" name="q13" value="A"><span><b>A.</b> Five ICMP replies were received</span></label><label class="option"><input type="radio" name="q13" value="B"><span><b>B.</b> Five interfaces are up</span></label><label class="option"><input type="radio" name="q13" value="C"><span><b>C.</b> Five BGP neighbors are configured</span></label><label class="option"><input type="radio" name="q13" value="D"><span><b>D.</b> The router rebooted five times</span></label><div class="feedback" hidden></div></article><article class="quiz-card" data-answer="B" data-q="14" data-explanation=""><h3>Question 14</h3><p>What is the difference between `running-config` and `startup-config`?</p><label class="option"><input type="radio" name="q14" value="A"><span><b>A.</b> They are two names for the BGP table</span></label><label class="option"><input type="radio" name="q14" value="B"><span><b>B.</b> `running-config` is the active configuration in memory; `startup-config` is the saved configuration used at the next boot</span></label><label class="option"><input type="radio" name="q14" value="C"><span><b>C.</b> `startup-config` contains only IP addresses</span></label><label class="option"><input type="radio" name="q14" value="D"><span><b>D.</b> `running-config` is stored only on a DNS server</span></label><div class="feedback" hidden></div></article><article class="quiz-card" data-answer="B" data-q="15" data-explanation=" ---"><h3>Question 15</h3><p>What is the most logical troubleshooting sequence if a ping between PC1 and PC2 fails?</p><label class="option"><input type="radio" name="q15" value="A"><span><b>A.</b> Change the AS numbers at random</span></label><label class="option"><input type="radio" name="q15" value="B"><span><b>B.</b> Check interfaces, transit-link connectivity, BGP session state, received prefixes, installed routes, and then test the ping again</span></label><label class="option"><input type="radio" name="q15" value="C"><span><b>C.</b> Immediately erase all configurations</span></label><label class="option"><input type="radio" name="q15" value="D"><span><b>D.</b> Change PC1&#x27;s TTL without checking routing</span></label><div class="feedback" hidden></div></article></div><button class="action" id="grade-quiz">Check answers</button><button class="action secondary" id="reset-quiz">Reset quiz</button><p id="quiz-score" class="score" aria-live="polite"></p></div><div class="panel challenge"><h2 id="part-c-practical-review-challenge">Part C — Practical review challenge</h2>
+<p>Try to answer without looking at the key:</p>
+<ol type="1">
+<li>Why could R2 not learn <code>192.168.1.0/24</code> before R1 advertised it?</li>
+<li>Why do <code>State/PfxRcd = 0</code> and <code>Idle</code> not mean the same thing?</li>
+<li>Which next hop should R1 use to reach <code>192.168.2.0/24</code>?</li>
+<li>Which command checks whether that route is installed in the routing table?</li>
+<li>Which evidence shows that traffic successfully travelled from PC2 to PC1?</li>
+<li>In <code>[20/0]</code>, why is the administrative distance <code>20</code> relevant when comparing an eBGP route with an OSPF route to the same prefix?</li>
+</ol>
+<h3 id="answer-key">Answer key</h3>
+<ol type="1">
+<li>A BGP session can exchange a prefix only when the prefix is advertised and accepted.</li>
+<li><code>Idle</code> is a BGP session state indicating that the session is not established; <code>0</code> in <code>State/PfxRcd</code> means the established neighbor has sent no prefixes.</li>
+<li><code>192.168.12.2</code>.</li>
+<li><code>show ip route bgp</code>.</li>
+<li>PC2 received five ICMP replies from <code>192.168.1.10</code>.</li>
+<li>Cisco IOS normally prefers the route source with the lower administrative distance. The default eBGP AD is 20, lower than OSPF’s usual 110, so eBGP is normally preferred when both provide the same destination and no other relevant condition changes the decision.</li>
+</ol>
+</div></section>
+<section id="flashcards" class="view" hidden><div class="panel"><h1>Part B — Flashcards</h1><p class="quiz-intro">Reveal each answer and mark the cards you already know. Your progress is saved locally.</p><div id="flashcard-list"><article class="flashcard"><div class="fc-count">CARD 01</div><h3>Which AS does R1 use?</h3><details><summary>Reveal answer</summary><div class="fc-answer">AS 65001.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 02</div><h3>Which AS does R2 use?</h3><details><summary>Reveal answer</summary><div class="fc-answer">AS 65002.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 03</div><h3>What is R1's address on the transit link?</h3><details><summary>Reveal answer</summary><div class="fc-answer">`192.168.12.1/30`.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 04</div><h3>What is R2's address on the transit link?</h3><details><summary>Reveal answer</summary><div class="fc-answer">`192.168.12.2/30`.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 05</div><h3>Which network is used for the inter-router transit link?</h3><details><summary>Reveal answer</summary><div class="fc-answer">`192.168.12.0/30`.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 06</div><h3>What is R1's LAN prefix?</h3><details><summary>Reveal answer</summary><div class="fc-answer">`192.168.1.0/24`.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 07</div><h3>What is R2's LAN prefix?</h3><details><summary>Reveal answer</summary><div class="fc-answer">`192.168.2.0/24`.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 08</div><h3>Which command administratively enables an interface?</h3><details><summary>Reveal answer</summary><div class="fc-answer">`no shutdown` (IOS abbreviation: `no shut`).</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 09</div><h3>Which command provides a brief summary of IP interfaces?</h3><details><summary>Reveal answer</summary><div class="fc-answer">`show ip interface brief`.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 10</div><h3>Which command configures R1's BGP process?</h3><details><summary>Reveal answer</summary><div class="fc-answer">`router bgp 65001`.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 11</div><h3>What does neighbor X remote-as Y do?</h3><details><summary>Reveal answer</summary><div class="fc-answer">Defines BGP neighbor X and identifies its remote AS as Y.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 12</div><h3>Which command displays BGP session status and the number of prefixes received?</h3><details><summary>Reveal answer</summary><div class="fc-answer">`show ip bgp summary`.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 13</div><h3>What does Idle mean in the BGP summary?</h3><details><summary>Reveal answer</summary><div class="fc-answer">The BGP session is not established at that time.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 14</div><h3>What does State/PfxRcd = 1 mean when the session is established?</h3><details><summary>Reveal answer</summary><div class="fc-answer">One prefix has been received from the neighbor.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 15</div><h3>Which command advertises LAN 1 from R1?</h3><details><summary>Reveal answer</summary><div class="fc-answer">`network 192.168.1.0 mask 255.255.255.0`.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 16</div><h3>Which command advertises LAN 2 from R2?</h3><details><summary>Reveal answer</summary><div class="fc-answer">`network 192.168.2.0 mask 255.255.255.0`.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 17</div><h3>Why must a prefix announced with a BGP network command exist in the routing table?</h3><details><summary>Reveal answer</summary><div class="fc-answer">IOS needs a matching route with the exact prefix and mask to originate it into BGP.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 18</div><h3>Which command displays prefixes and paths known to BGP?</h3><details><summary>Reveal answer</summary><div class="fc-answer">`show ip bgp`.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 19</div><h3>What do * and > mean in the BGP table?</h3><details><summary>Reveal answer</summary><div class="fc-answer">The path is valid (`*`) and selected as the best path (`>`).</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 20</div><h3>What does the final i mean in the AS-path/origin display in this lab?</h3><details><summary>Reveal answer</summary><div class="fc-answer">It is the BGP origin code for IGP origin; here the prefix was originated using a `network` statement.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 21</div><h3>What does 0.0.0.0 as the next hop of a local prefix mean?</h3><details><summary>Reveal answer</summary><div class="fc-answer">The prefix originated on the local router.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 22</div><h3>Which command displays BGP routes installed in the IP routing table?</h3><details><summary>Reveal answer</summary><div class="fc-answer">`show ip route bgp`.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 23</div><h3>In [20/0], what does 20 mean?</h3><details><summary>Reveal answer</summary><div class="fc-answer">Administrative distance (AD), the value IOS uses to compare route sources for the same destination. The default eBGP AD is 20.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 24</div><h3>In [20/0], what does 0 mean?</h3><details><summary>Reveal answer</summary><div class="fc-answer">The route metric shown for that BGP route; it is separate from administrative distance.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 25</div><h3>What is administrative distance?</h3><details><summary>Reveal answer</summary><div class="fc-answer">A local router value used to rank route sources for the same destination; lower values are preferred.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 26</div><h3>What are the usual Cisco IOS administrative distances for eBGP, OSPF, and RIP?</h3><details><summary>Reveal answer</summary><div class="fc-answer">eBGP 20, OSPF 110, RIP 120.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 27</div><h3>If the same prefix is learned through eBGP and OSPF, which source is normally preferred by Cisco IOS based on AD?</h3><details><summary>Reveal answer</summary><div class="fc-answer">eBGP, because its default AD of 20 is lower than OSPF's 110, assuming no other relevant conditions change the decision.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 28</div><h3>Is administrative distance the same as BGP MED?</h3><details><summary>Reveal answer</summary><div class="fc-answer">No. AD is a local route-source preference value; MED is a BGP path attribute.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 29</div><h3>What is Weight used for in the IOS output?</h3><details><summary>Reveal answer</summary><div class="fc-answer">A Cisco-specific path-selection value local to the router; it is not exchanged with BGP neighbors.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 30</div><h3>Why was the BGP session initially Idle?</h3><details><summary>Reveal answer</summary><div class="fc-answer">R2 had not yet been configured for the BGP peering.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 31</div><h3>Why did the established session initially show zero prefixes?</h3><details><summary>Reveal answer</summary><div class="fc-answer">The neighbors were established, but the LAN `network` advertisements had not yet been added.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 32</div><h3>Which test checks the transit link between the routers?</h3><details><summary>Reveal answer</summary><div class="fc-answer">Ping between `192.168.12.1` and `192.168.12.2`.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 33</div><h3>Which test checks the end-to-end path between the LANs?</h3><details><summary>Reveal answer</summary><div class="fc-answer">Ping between PC1 (`192.168.1.10`) and PC2 (`192.168.2.10`) in both directions.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 34</div><h3>Which command saves the active configuration for the next boot?</h3><details><summary>Reveal answer</summary><div class="fc-answer">`copy running-config startup-config`.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article><article class="flashcard"><div class="fc-count">CARD 35</div><h3>What is the difference between running-config and startup-config?</h3><details><summary>Reveal answer</summary><div class="fc-answer">The active configuration in memory versus the saved configuration used at the next boot.</div></details><label class="known"><input type="checkbox" class="known-check"> I know this</label></article></div><p id="fc-status" class="score"></p><button class="action secondary" id="reset-cards">Reset flashcards</button></div></section>
+<section id="progress" class="view" hidden><div class="panel"><h1>My progress</h1><p id="progress-detail">Complete the lab review, pass the quiz, and mark the flashcards you know.</p><ul><li id="guide-status">Lab guide: review in progress</li><li id="quiz-status">Quiz: not completed</li><li id="cards-status">Flashcards: 0 known</li></ul><button class="action secondary" id="reset-progress">Reset all progress</button></div></section>
+<footer class="site-foot"><strong>KG-Lab · Networking</strong><p>CCNP ENCOR learning notes — Lab 01: eBGP Basics. Results and CLI excerpts are based on the documented GNS3 session.</p></footer></main>
+<script>
+const tabs=[...document.querySelectorAll('.tab')],views=[...document.querySelectorAll('.view')];
+tabs.forEach(t=>t.addEventListener('click',()=>{tabs.forEach(x=>x.classList.toggle('active',x===t));views.forEach(v=>v.hidden=v.id!==t.dataset.view);if(t.dataset.view==='progress')renderProgress();window.scrollTo({top:0,behavior:'smooth'});}));
+const $=s=>document.querySelector(s);const quizKey='kglab-ebgp-quiz-v1',cardsKey='kglab-ebgp-cards-v1',guideKey='kglab-ebgp-guide-v1';
+$('#guide').addEventListener('scroll',()=>{});let quizDone=localStorage.getItem(quizKey)==='done';
+$('#grade-quiz').addEventListener('click',()=>{let score=0,answered=0;document.querySelectorAll('.quiz-card').forEach(card=>{const chosen=card.querySelector('input:checked'),feedback=card.querySelector('.feedback');feedback.hidden=false;const right=card.dataset.answer;if(chosen){answered++;if(chosen.value===right){score++;feedback.className='feedback';feedback.innerHTML='<strong>Correct.</strong> '+explanationFor(card.dataset.q);}else{feedback.className='feedback wrong';feedback.innerHTML='<strong>Incorrect.</strong> Correct answer: '+right+'. '+explanationFor(card.dataset.q);}}else{feedback.className='feedback wrong';feedback.innerHTML='<strong>Not answered.</strong> Correct answer: '+right+'. '+explanationFor(card.dataset.q);}});$('#quiz-score').textContent=`Score: ${score} / ${document.querySelectorAll('.quiz-card').length} (${answered} answered)`;quizDone=true;localStorage.setItem(quizKey,'done');renderProgress();});
+function explanationFor(n){const e={'' : ''};const card=document.querySelector(`.quiz-card[data-q="${n}"]`);return card.dataset.explanation||'';}
+$('#reset-quiz').addEventListener('click',()=>{document.querySelectorAll('.quiz-card input').forEach(i=>i.checked=false);document.querySelectorAll('.feedback').forEach(f=>{f.hidden=true;f.innerHTML=''});$('#quiz-score').textContent='';quizDone=false;localStorage.removeItem(quizKey);renderProgress();});
+function renderCards(){let known=0;document.querySelectorAll('.known-check').forEach((c,i)=>{c.checked=(JSON.parse(localStorage.getItem(cardsKey)||'[]')[i]===true);if(c.checked)known++;c.onchange=()=>{const all=[...document.querySelectorAll('.known-check')].map(x=>x.checked);localStorage.setItem(cardsKey,JSON.stringify(all));renderCards();renderProgress();};});$('#fc-status').textContent=`${known} / ${document.querySelectorAll('.known-check').length} flashcards known`;}
+$('#reset-cards').addEventListener('click',()=>{localStorage.removeItem(cardsKey);renderCards();renderProgress();});
+function renderProgress(){const known=JSON.parse(localStorage.getItem(cardsKey)||'[]').filter(Boolean).length,total=document.querySelectorAll('.known-check').length;const guideDone=localStorage.getItem(guideKey)==='done';const count=(guideDone?1:0)+(quizDone?1:0)+(total>0&&known===total?1:0);$('#progress-label').textContent=`${count} of 3 activities complete`;$('#progress-fill').style.width=(count/3*100)+'%';$('#guide-status').textContent='Lab guide: '+(guideDone?'reviewed':'review in progress');$('#quiz-status').textContent='Quiz: '+(quizDone?'completed':'not completed');$('#cards-status').textContent=`Flashcards: ${known} / ${total} known`;$('#progress-detail').textContent=`${count} of 3 activities complete. ${known} of ${total} flashcards marked as known.`;}
+// Mark the guide reviewed when the learner reaches its end.
+const guideObserver=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)&&window.scrollY+window.innerHeight>=document.documentElement.scrollHeight-80){localStorage.setItem(guideKey,'done');renderProgress();}},{threshold:0.1});guideObserver.observe($('#guide'));
+$('#reset-progress').addEventListener('click',()=>{localStorage.removeItem(guideKey);localStorage.removeItem(quizKey);localStorage.removeItem(cardsKey);quizDone=false;$('#reset-quiz').click();renderCards();renderProgress();});renderCards();renderProgress();
+</script></body></html>
